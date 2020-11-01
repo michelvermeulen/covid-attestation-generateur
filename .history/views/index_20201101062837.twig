@@ -1,0 +1,121 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="container p-4 py-5 bg-warning">
+		<div class="row">
+			<div class="col">
+				<h1>Générateur d'attestation COVID</h1>
+				<p>Selon le modèle téléchargeable sur https://media.interieur.gouv.fr/deplacement-covid-19/</p>
+				{% if not data %}
+					<div>
+						<h3>Comment ça marche</h3>
+						Ce formulaire sauvegarde vos informations dans votre navigateur et simplifie la génération d'attestations de sortie COVID. Le prochaine fois que vous venez, vous n'aurez plus à remplir ces infos. Aucune donnée n'est conservée ailleurs que sur votre ordinateur ou mobile (le code est Open Source est disponible sur xxx).
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="container p-4">
+		<div class="row">
+			<div class="col">
+				{% if data %}
+					<h3>
+						Données sauvegardées
+					</h3>
+					<p>
+						<b>Prénom :</b>
+						{{data.prenom}}
+					</p>
+					<p>
+						<b>Nom :</b>
+						{{data.nom}}
+					</p>
+					<p>
+						<b>Date de naissance :</b>
+						{{data.datenaissance}}
+					</p>
+					<p>
+						<b>Lieu de naissance :</b>
+						{{data.lieunaissance}}
+					</p>
+					<p>
+						<b>Adresse :</b>
+						{{data.adresse}}
+					</p>
+					<p>
+						<b>Ville :</b>
+						{{data.ville}}
+					</p>
+					<p>
+						<b>Code postal :</b>
+						{{data.codepostal}}
+					</p>
+					<a class="w-100 btn btn-secondary" href="?clear">Modifier mes données</a>
+					<hr class="my-5">
+					<form method="POST" action="/generate">
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button>
+						<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button>
+						<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button>
+						<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button>
+						<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button>
+						<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button>
+						<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button>
+						<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button>
+						<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button>
+						<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
+					</form>
+				{% else %}
+
+					<form method="POST" action="/generate">
+						<div class="form-group mb-4">
+							<label for="nom">Nom</label>
+							<input required name="nom" type="text" id="nom" class="form-control mb-4">
+							<label for="prenom">Prénom</label>
+							<input required name="prenom" type="text" id="prenom" class="form-control mb-4">
+							<label for="datenaissance">Date de naissance</label>
+							<input required name="datenaissance" type="date" id="datenaissance" class="form-control mb-4">
+							<label for="lieunaissance">Lieu de naissance</label>
+							<input required name="lieunaissance" type="text" id="lieunaissance" class="form-control mb-4">
+						</div>
+						<hr class="my-5">
+						<div class="form-group mb-4">
+							<label for="adresse">Adresse</label>
+							<input required name="adresse" type="text" id="adresse" class="form-control mb-4">
+							<label for="ville">Ville</label>
+							<input required name="ville" type="text" id="ville" class="form-control mb-4">
+							<label for="codepostal">Code postal</label>
+							<input required name="codepostal" type="number" id="codepostal" class="form-control mb-4">
+						</div>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button>
+						<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button>
+						<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button>
+						<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button>
+						<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button>
+						<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button>
+						<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button>
+						<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button>
+						<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
+						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button>
+						<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
+					</form>
+				{% endif %}
+
+			</div>
+		</div>
+	</div>
+{% endblock %}
