@@ -11,39 +11,48 @@ const moment = require("moment-timezone");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  let cookie;
-  if (typeof req.body.clear !== "undefined") {
-    res.cookie("covidgendata", null);
-  } else {
-    cookie = req.cookies.covidgendata;
-  }
-
+  let cookie = req.cookies.covidgendata;
   let data;
   if (typeof cookie != "undefined") {
     data = JSON.parse(cookie);
   } else {
     data = null;
   }
+  if (typeof req.query.clear !== "undefined") {
+    // res.cookie("covidgendata", null, {
+    //   maxAge: new Date(0),
+    // });
+    res.render("index", { data, showForm: true });
+  } else {
+    res.render("index", { data });
+  }
+});
 
-  res.render("index", { data });
+router.get("/generate", function (req, res, next) {
+  res.redirect("/");
 });
 
 router.post("/generate", async function (req, res, next) {
   let data;
   if (req.body && typeof req.body.nom !== "undefined") {
-    res.cookie("covidgendata", JSON.stringify(req.body));
+    let now = new Date();
+    now.setMonth(now.getMonth() + 6);
+    res.cookie("covidgendata", JSON.stringify(req.body), {
+      maxAge: 15552000000,
+    });
     data = req.body;
+    res.redirect("/");
   } else {
     data = JSON.parse(req.cookies.covidgendata);
+    data.raison = req.body.raison;
+
+    const pdf = await editPdf(data);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=attestation.pdf");
+    // res.setHeader("Content-Disposition", "inline; filename=attestation.pdf");
+    res.send(Buffer.from(pdf.buffer));
   }
-  data.raison = req.body.raison;
-
-  const pdf = await editPdf(data);
-
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "attachment; filename=attestation.pdf");
-  // res.setHeader("Content-Disposition", "inline; filename=attestation.pdf");
-  res.send(Buffer.from(pdf.buffer));
 });
 
 async function editPdf(data) {
@@ -66,13 +75,13 @@ async function editPdf(data) {
 
     return [(dd > 9 ? "" : "0") + dd, (mm > 9 ? "" : "0") + mm, this.getFullYear()].join("/");
   };
-  const date = new Date(datenaissance);
+  //const date = new Date(datenaissance);
   const now = new Date();
   const localTime = moment().tz("Europe/Paris").format("H:m");
   const localTimeElms = localTime.split(":", 2);
   const localHour = localTimeElms[0].toString().padStart(2, 0) + ":" + localTimeElms[1].toString().padStart(2, 0);
   drawText(prenom + " " + nom, 125, 696);
-  drawText(date.getFrenchFormat(), 125, 675);
+  drawText(datenaissance, 125, 675);
   drawText(lieunaissance, 305, 675);
   drawText(`${adresse} ${codepostal} ${ville}`, 135, 653);
   drawText(ville, 110, 175);
@@ -102,7 +111,7 @@ async function editPdf(data) {
     Naissance: ${datenaissance} à ${lieunaissance}
     Adresse: ${adresse} ${codepostal} ${ville}
     Sortie: ${now.getFrenchFormat()} à ${localHour}
-    Motifs: ${motifs[raison]}
+    Motifs: ${motifs[raison - 1]}
   `,
     { type: "svg" }
   );

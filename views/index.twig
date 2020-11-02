@@ -1,27 +1,36 @@
 {% extends 'layout.twig' %}
-
 {% block body %}
-	<div class="container p-4 py-5 bg-warning">
-		<div class="row">
-			<div class="col">
-				<h1>
-					🔖
-					<br>
-					Générateur d'attestation COVID</h1>
-				<p>Selon le modèle téléchargeable sur https://media.interieur.gouv.fr/deplacement-covid-19/</p>
-				{% if not data %}
-					<div>
-						<h3>Comment ça marche</h3>
-						Ce formulaire sauvegarde vos informations dans votre navigateur et simplifie la génération d'attestations de sortie COVID. La prochaine fois que vous viendrez, vous n'aurez plus à remplir ces infos. Aucune donnée n'est conservée ailleurs que sur votre ordinateur ou mobile (le code est Open Source est disponible sur xxx).
+	<div class="bg-warning">
+		<div class="container p-4 pb-5 pt-3 bg-warning">
+			<div class="row">
+				<div class="col">
+					<div class="text-right">
+						<a class="btn btn-light mb-4" href="https://www.facebook.com/sharer/sharer.php?u=https://covid.webflandre.fr" target="_blank">Partager 👍</a>
 					</div>
-				{% endif %}
+					<h1>
+						🔖
+						<br>
+						Générateur d'attestation COVID</h1>
+					<p>Selon le modèle téléchargeable sur https://media.interieur.gouv.fr/deplacement-covid-19/</p>
+					{% if showForm %}
+						<div>
+							<h3>Comment ça marche</h3>
+							<p>1. Ajoutez l'app à votre écran d'accueil (optionnel -
+								<a href="#" class="text-dark" data-toggle="modal" data-target="#instructions">cliquez ici pour en savoir plus</a>)</p>
+							<p>2. Renseignez vos informations la première fois seulement</p>
+							<p>3. Choisissez le motif de votre sortie à chaque fois que vous souhaitez une attestation</p>
+							<p>4. Soutenez les commerçants locaux en affichant leur publicité</p>
+							<p>ℹ️ Aucune information n'est collectée</p>
+						</div>
+					{% endif %}
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container p-4">
+	<div class="container p-4 mt-5">
 		<div class="row">
 			<div class="col">
-				{% if data %}
+				{% if not showForm %}
 					<h3>
 						Données sauvegardées
 					</h3>
@@ -53,72 +62,132 @@
 						<b>Code postal :</b>
 						{{data.codepostal}}
 					</p>
-					<a class="w-100 btn btn-secondary" href="?clear">Modifier mes données</a>
-					<hr class="my-5">
-					<form method="POST" action="/generate" target="_blank">
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button>
-						<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button>
-						<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button>
-						<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button>
-						<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button>
-						<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button>
-						<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button>
-						<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button>
-						<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button>
-						<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
-					</form>
-				{% else %}
-
-					<form method="POST" action="/generate" target="_blank">
-						<div class="form-group mb-4">
-							<label for="nom">Nom</label>
-							<input required name="nom" type="text" id="nom" class="form-control mb-4">
-							<label for="prenom">Prénom</label>
-							<input required name="prenom" type="text" id="prenom" class="form-control mb-4">
-							<label for="datenaissance">Date de naissance</label>
-							<input required name="datenaissance" type="date" id="datenaissance" class="form-control mb-4">
-							<label for="lieunaissance">Lieu de naissance</label>
-							<input required name="lieunaissance" type="text" id="lieunaissance" class="form-control mb-4">
-						</div>
-						<hr class="my-5">
-						<div class="form-group mb-4">
-							<label for="adresse">Adresse</label>
-							<input required name="adresse" type="text" id="adresse" class="form-control mb-4">
-							<label for="ville">Ville</label>
-							<input required name="ville" type="text" id="ville" class="form-control mb-4">
-							<label for="codepostal">Code postal</label>
-							<input required name="codepostal" type="number" id="codepostal" class="form-control mb-4">
-						</div>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button>
-						<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button>
-						<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button>
-						<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button>
-						<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button>
-						<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button>
-						<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button>
-						<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button>
-						<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
-						<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button>
-						<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
-					</form>
-				{% endif %}
-
+					<a class="w-100 btn btn-secondary" href="/?clear">Modifier mes données</a>
+				</div>
 			</div>
 		</div>
 	</div>
-{% endblock %}
+	<div class="p-5 my-5 bg-light">
+		<div class="text-center">
+			<h4>💛<br>Soutenons nos commerces</h4>
+			<p>
+				Cet espace de publicité est offert aux petits commerçants de votre ville impactés par une fermeture partielle ou totale.
+			</p>
+			<p>Vous êtes un petit commerçant ? Contactez-nous à
+				<a href="mailto:covid@webflandre.fr?subject=Demande%20Publicit%C3%A9&body=Bonjour%2C%0D%0A%0D%0AJe%20souhaite%20me%20r%C3%A9f%C3%A9rencer%20sur%20l'application%20Attestation%20COVID%2C%20voici%20mes%20renseignements%20%3A%0D%0A%0D%0A-%20Adresse%20%3A%0D%0A-%20Code%20postal%20%3A%0D%0A-%20Activit%C3%A9%20%3A%0D%0A-%20Code%20NAF%20%3A%0D%0A-%20CA%20de%20l'ann%C3%A9e%20pr%C3%A9c%C3%A9dente%20%3A%0D%0A-%20Expliquer%20en%20quelques%20mots%20en%20quoi%20votre%20activit%C3%A9%20est%20impact%C3%A9e%20%3A">covid@webflandre.fr</a>.
+			</p>
+		</div>
+	</div>
+	<div class="container p-4">
+		<div class="row">
+			<div class="col">
+				<div class="text-center">
+					<h4>📄<br>Mon attestation</h4>
+				</div>
+				<form method="POST" action="/generate" target="_blank">
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button>
+					<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button>
+					<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button>
+					<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button>
+					<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button>
+					<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button>
+					<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button>
+					<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button>
+					<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
+					<button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button>
+					<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
+				</form>
+			{% else %}
+				<form method="POST" action="/generate">
+					<div class="form-group mb-4">
+						<label for="nom">Nom</label>
+						<input required name="nom" type="text" id="nom" class="form-control mb-4" value="{{data.nom}}">
+						<label for="prenom">Prénom</label>
+						<input required name="prenom" type="text" id="prenom" class="form-control mb-4" value="{{data.prenom}}">
+						<label for="datenaissance">Date de naissance</label>
+						<input required name="datenaissance" type="text" id="datenaissance" class="form-control mb-4" placeholder="dd/mm/yyyy" value="{{data.datenaissance}}">
+						<label for="lieunaissance">Lieu de naissance</label>
+						<input required name="lieunaissance" type="text" id="lieunaissance" class="form-control mb-4" value="{{data.lieunaissance}}">
+					</div>
+					<hr class="my-5">
+					<div class="form-group mb-4">
+						<label for="adresse">Adresse</label>
+						<input required name="adresse" type="text" id="adresse" class="form-control mb-4" value="{{data.adresse}}">
+						<label for="ville">Ville</label>
+						<input required name="ville" type="text" id="ville" class="form-control mb-4" value="{{data.ville}}">
+						<label for="codepostal">Code postal</label>
+						<input required name="codepostal" type="number" id="codepostal" class="form-control mb-4" value="{{data.codepostal}}">
+					</div>
+					<button type="submit" class="btn btn-primary w-100 my-4">Enregistrer</button>
+				</form>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<div class="py-5 bg-light mt-5">
+	<div class="container p-4">
+		<div class="row">
+			<div class="col">
+				<p class="my-5">Fait avec 💛 par
+					<a href="https://www.webflandre.fr">WebFlandre</a>
+				</p>
+				<h3>Confidentialité de vos données</h3>
+				<p>Ce formulaire sauvegarde vos informations dans votre navigateur et simplifie la génération d'attestations de sortie COVID. Aucune donnée n'est conservée ailleurs que sur votre ordinateur ou mobile (le code est Open Source est disponible sur https://github.com/michelvermeulen/covid-attestation-generateur).</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal" tabindex="-1" id="instructions">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ajouter à l'accueil</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="accordion" id="accordionExample">
+					<div class="card">
+						<div class="card-header">
+							<h2 class="mb-0">
+								<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-controls="collapseOne">
+									Pour iOS
+								</button>
+							</h2>
+						</div>
+
+						<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+							<div class="card-body">
+								Cliquer sur l'icône + en bas de votre navigateur puis "Ajouter à l'écran d'accueil".
+								<img class="mw-100 my-4" src="/images/ios.png" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header">
+							<h2 class="mb-0">
+								<button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									Pour Android
+								</button>
+							</h2>
+						</div>
+						<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+							<div class="card-body">
+								Lorsque votre navigateur vous le demande, cliquez sur "Ajouter à l'écran d'accueil" ou sélectionnez cette option dans le menu du navigateur.
+								<img class="mw-100 my-4" src="/images/android.png" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}
