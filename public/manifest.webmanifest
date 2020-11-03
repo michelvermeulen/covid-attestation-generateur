@@ -16,7 +16,7 @@
     ],
     "start_url": "/",
     "background_color": "#ffffff",
-    "display": "standalone",
-    "scope": "/",
+    "display": "minimal-ui",
+    "scope": "/app/",
     "theme_color": "#ffc108"
   }

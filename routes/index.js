@@ -8,9 +8,21 @@ const { drawLinesOfText, drawSvgPath } = require("pdf-lib");
 const QRCode = require("qrcode");
 const { default: Stream } = require("pdf-lib/cjs/core/streams/Stream");
 const moment = require("moment-timezone");
+var mysql = require("mysql");
+const useragent = require("express-useragent");
+require("dotenv").config();
+var connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
+
+router.get("/", function (req, res, next) {
+  res.redirect("/app/");
+});
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/app/", function (req, res, next) {
   let cookie = req.cookies.covidgendata;
   let data;
   if (typeof cookie != "undefined") {
@@ -18,7 +30,7 @@ router.get("/", function (req, res, next) {
   } else {
     data = null;
   }
-  if (typeof req.query.clear !== "undefined") {
+  if (typeof req.query.clear !== "undefined" || !data) {
     // res.cookie("covidgendata", null, {
     //   maxAge: new Date(0),
     // });
@@ -28,11 +40,30 @@ router.get("/", function (req, res, next) {
   }
 });
 
-router.get("/generate", function (req, res, next) {
-  res.redirect("/");
+router.get("/pdf/", async function (req, res, next) {
+  if (typeof req.cookies.covidgendata == "undefined" || JSON.parse(req.cookies.covidgendata).nom.length == 0 || typeof req.query.raison == "undefined") {
+    res.redirect("/app/");
+  } else {
+    data = JSON.parse(req.cookies.covidgendata);
+    data.raison = req.query.raison;
+    const pdf = await editPdf(data);
+
+    var source = req.headers["user-agent"],
+      ua = useragent.parse(source);
+
+    connection.query("INSERT INTO webflandre.covid_hits (user_agent, time) VALUES(?,?)", [req.headers["user-agent"], moment().tz("Europe/Paris").format("YYYY-M-DD HH:mm:ss")], function (err, rows, fields) {
+      if (err) throw err;
+    });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", Buffer.byteLength(Buffer.from(pdf.buffer), "utf-8"));
+    // res.setHeader("Content-Disposition", "attachment; filename=attestation.pdf");
+    res.setHeader("Content-Disposition", "inline; filename=attestation" + new Date().getTime() + ".pdf");
+    res.send(Buffer.from(pdf.buffer));
+  }
 });
 
-router.post("/generate", async function (req, res, next) {
+router.post("/app/generate", async function (req, res, next) {
   let data;
   if (req.body && typeof req.body.nom !== "undefined") {
     let now = new Date();
@@ -42,16 +73,6 @@ router.post("/generate", async function (req, res, next) {
     });
     data = req.body;
     res.redirect("/");
-  } else {
-    data = JSON.parse(req.cookies.covidgendata);
-    data.raison = req.body.raison;
-
-    const pdf = await editPdf(data);
-
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "attachment; filename=attestation.pdf");
-    // res.setHeader("Content-Disposition", "inline; filename=attestation.pdf");
-    res.send(Buffer.from(pdf.buffer));
   }
 });
 
