@@ -14,6 +14,7 @@
 						<br>
 						Générateur d'attestation COVID</h1>
 					<p>Selon le modèle téléchargeable sur https://media.interieur.gouv.fr/deplacement-covid-19/</p>
+					<div class="alert alert-info">Version mise à jour au 28/11/2020</div>
 					{% if showForm %}
 						<div>
 							<h3>Comment ça marche</h3>
@@ -29,6 +30,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="container p-4 mt-5">
 		<div class="row">
 			<div class="col">
@@ -69,17 +71,17 @@
 			</div>
 		</div>
 	</div>
-	<div class="p-5 my-5 bg-light">
-		<div class="text-center">
-			<h4>💛<br>Soutenons nos commerces</h4>
-			<p>
-				Cet espace de publicité est offert aux petits commerçants de votre ville impactés par une fermeture partielle ou totale.
-			</p>
-			<p>Vous êtes un petit commerçant ? Contactez-nous à
-				<a href="mailto:covid@webflandre.fr?subject=Demande%20Publicit%C3%A9&body=Bonjour%2C%0D%0A%0D%0AJe%20souhaite%20me%20r%C3%A9f%C3%A9rencer%20sur%20l'application%20Attestation%20COVID%2C%20voici%20mes%20renseignements%20%3A%0D%0A%0D%0A-%20Adresse%20%3A%0D%0A-%20Code%20postal%20%3A%0D%0A-%20Activit%C3%A9%20%3A%0D%0A-%20Code%20NAF%20%3A%0D%0A-%20CA%20de%20l'ann%C3%A9e%20pr%C3%A9c%C3%A9dente%20%3A%0D%0A-%20Expliquer%20en%20quelques%20mots%20en%20quoi%20votre%20activit%C3%A9%20est%20impact%C3%A9e%20%3A">covid@webflandre.fr</a>.
-			</p>
-		</div>
-	</div>
+	{# <div class="p-5 my-5 bg-light">
+									<div class="text-center">
+										<h4>💛<br>Soutenons nos commerces</h4>
+										<p>
+											Cet espace de publicité est offert aux petits commerçants de votre ville impactés par une fermeture partielle ou totale.
+										</p>
+										<p>Vous êtes un petit commerçant ? Contactez-nous à
+											<a href="mailto:covid@webflandre.fr?subject=Demande%20Publicit%C3%A9&body=Bonjour%2C%0D%0A%0D%0AJe%20souhaite%20me%20r%C3%A9f%C3%A9rencer%20sur%20l'application%20Attestation%20COVID%2C%20voici%20mes%20renseignements%20%3A%0D%0A%0D%0A-%20Adresse%20%3A%0D%0A-%20Code%20postal%20%3A%0D%0A-%20Activit%C3%A9%20%3A%0D%0A-%20Code%20NAF%20%3A%0D%0A-%20CA%20de%20l'ann%C3%A9e%20pr%C3%A9c%C3%A9dente%20%3A%0D%0A-%20Expliquer%20en%20quelques%20mots%20en%20quoi%20votre%20activit%C3%A9%20est%20impact%C3%A9e%20%3A">covid@webflandre.fr</a>.
+										</p>
+									</div>
+								</div> #}
 	<div class="container p-4">
 		<div class="row">
 			<div class="col">
@@ -89,40 +91,65 @@
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=1">Travail</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="1">Travail</button> #}
-				<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou un établissement d’enseignement ou de formation, déplacements professionnels ne pouvant être différés [2], déplacements pour un concours ou un examen.</p>
+				<p class="text-muted">Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou le lieu d’enseignement et de formation, déplacements professionnels ne pouvant être différés.</p>
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=2">Courses</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="2">Courses</button> #}
-				<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, des achats de première nécessité [3] dans des établissements dont les activités demeurent autorisées, le retrait de commande et les livraisons à domicile.</p>
+				<p class="text-muted">Déplacements pour effectuer des achats de première nécessité ou des retraits de commandes.</p>
 
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=3">Consultation médicale</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="3">Consultation médicale</button> #}
-				<p class="text-muted">Consultations, examens et soins ne pouvant être assurés à distance et l’achat de médicaments.</p>
+				<p class="text-muted">Déplacements pour des consultations, examens, actes de prévention (dont vaccination) et soins ne pouvant être assurés à distance ou pour l’achat de produits de santé.</p>
 
-				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=4">Assistance familiale</a>
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=4">Motif familial impérieux, personnes vulnérables ou précaires ou gardes d’enfants</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="4">Assistance familiale</button> #}
-				<p class="text-muted">Déplacements pour motif familial impérieux, pour l'assistance aux personnes vulnérables et précaires ou la garde d'enfants.</p>
+				<p class="text-muted">Déplacements pour motif familial impérieux, pour l’assistance aux personnes vulnérables ou  précaires ou pour la garde d’enfants.</p>
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=5">Assistance handicap</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="5">Assistance handicap</button> #}
-				<p class="text-muted">Déplacement des personnes en situation de handicap et leur accompagnant.</p>
+				<p class="text-muted">Déplacements des personnes en situation de handicap et de leur accompagnant.</p>
 
-				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=6">Sortie</a>
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=6">Sortie & Sport</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="6">Sortie</button> #}
-				<p class="text-muted">Déplacements brefs, dans la limite d'une heure quotidienne et dans un rayon maximal d'un kilomètre autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective et de toute proximité avec d'autres personnes, soit à la promenade avec les seules personnes regroupées dans un même domicile, soit aux besoins des animaux de compagnie.</p>
+				<p class="text-muted">Déplacements dans un rayon maximal de dix kilomètres autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective, soit à la promenade avec les seules personnes regroupées dans un même domicile.</p>
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=7">Justice</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="7">Justice</button> #}
-				<p class="text-muted">Convocation judiciaire ou administrative et pour se rendre dans un service public.</p>
+				<p class="text-muted">Déplacements pour répondre à une convocation judiciaire ou administrative, déplacements pour se rendre chez un professionnel du droit, pour un acte ou une démarche qui ne peuvent être réalisés à distance.</p>
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=8">Intérêt général</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="8">Intérêt général</button> #}
-				<p class="text-muted">Participation à des missions d'intérêt général sur demande de l'autorité administrative.</p>
+				<p class="text-muted">Déplacements pour participer à des missions d’intérêt général sur demande de l’autorité administrative.</p>
 
 				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=9">Enfants</a>
 				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
 				<p class="text-muted">Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=10">Déplacements de transit et longue distance</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Déplacements liés à des transits ferroviaires, aériens ou en bus pour des déplacements de longues distances.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=11">Achats professionnels et livraisons à domicile</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, ou pour des livraisons à domicile.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=12">Déménagement</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Déplacements liés à un déménagement résultant d'un changement de domicile et déplacements indispensables à l'acquisition ou à la location d’une résidence principale, insusceptibles d'être différés.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=13">Démarches administratives ou juridiques</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Déplacements pour se rendre dans un service public pour un acte ou une démarche qui ne peuvent être réalisés à distance.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=14">Culte</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Déplacements à destination ou en provenance d'un lieu de culte.</p>
+
+				<a class="btn btn-primary w-100 my-4" target="_blank" href="/pdf/?raison=15">Participation à des rassemblements autorisés</a>
+				{# <button name="raison" type="submit" class="btn btn-primary w-100 my-4" value="9">Enfants</button> #}
+				<p class="text-muted">Participation à des rassemblements, réunions ou activités sur la voie publique ou dans un lieu ouvert au public qui ne sont pas interdits en application de l'article 3.</p>
+
 			{% else %}
 				<form method="POST" action="/app/generate">
 					<div class="form-group mb-4">

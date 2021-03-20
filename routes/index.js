@@ -77,7 +77,7 @@ router.post("/app/generate", async function (req, res, next) {
 });
 
 async function editPdf(data) {
-  const existingPdfBytes = fs.readFileSync(path.resolve(__dirname, "../public/layout.pdf"));
+  const existingPdfBytes = fs.readFileSync(path.resolve(__dirname, "../public/layout_new_2.pdf"));
   const pdfDoc = await pdflib.PDFDocument.load(existingPdfBytes);
 
   const page1 = pdfDoc.getPages()[0];
@@ -101,28 +101,49 @@ async function editPdf(data) {
   const localTime = moment().tz("Europe/Paris").format("H:m");
   const localTimeElms = localTime.split(":", 2);
   const localHour = localTimeElms[0].toString().padStart(2, 0) + ":" + localTimeElms[1].toString().padStart(2, 0);
-  drawText(prenom + " " + nom, 125, 696);
-  drawText(datenaissance, 125, 675);
-  drawText(lieunaissance, 305, 675);
-  drawText(`${adresse} ${codepostal} ${ville}`, 135, 653);
-  drawText(ville, 110, 175);
-  drawText(now.getFrenchFormat(), 110, 153);
-  drawText(localHour, 280, 153);
-  let crossCoords = [
-    [76, 585],
-    [76, 535],
-    [76, 475],
-    [76, 440],
-    [76, 400],
-    [76, 360],
-    [76, 290],
-    [76, 250],
-    [76, 215],
+  drawText(prenom + " " + nom, 150, 595);
+  drawText(datenaissance, 140, 582);
+  drawText(lieunaissance, 240, 582);
+  drawText(`${adresse} ${codepostal} ${ville}`, 140, 568);
+  drawText(ville, 100, 161);
+  drawText(now.getFrenchFormat(), 80, 148);
+  drawText(localHour, 180, 148);
+
+
+  let motifs = ["Travail", "Courses", "Consultation médicale", "Motif familial impérieux, personnes vulnérables ou précaires ou gardes d’enfants", "Assistance handicap", "Sortie & Sport", "Justice", "Intérêt général", "Enfants", "Déplacements de transit et longue distance", "Achats professionnels et livraisons à domicile", "Déménagement", "Démarches administratives ou juridiques", "Culte", "Participation à des rassemblements autorisés"];
+
+  let reasons = [
+    "Déplacements entre le domicile et le lieu d’exercice de l’activité professionnelle ou le lieu d’enseignement et de formation, déplacements professionnels ne pouvant être différés",
+    "Déplacements pour effectuer des achats de première nécessité ou des retraits de commandes",
+    "Déplacements pour des consultations, examens, actes de prévention (dont vaccination) et soins ne pouvant être assurés à distance ou pour l’achat de produits de santé",
+    "Motif familial impérieux, personnes vulnérables ou précaires ou gardes d’enfant",
+    "Déplacements pour motif familial impérieux, pour l’assistance aux personnes vulnérables ou  précaires ou pour la garde d’enfants",
+    "Déplacements des personnes en situation de handicap et de leur accompagnant",
+    "Déplacements dans un rayon maximal de dix kilomètres autour du domicile, liés soit à l'activité physique individuelle des personnes, à l'exclusion de toute pratique sportive collective, soit à la promenade avec les seules personnes regroupées dans un même domicile",
+    "Déplacements pour répondre à une convocation judiciaire ou administrative, déplacements pour se rendre chez un professionnel du droit, pour un acte ou une démarche qui ne peuvent être réalisés à distance",
+    "Déplacements pour participer à des missions d’intérêt général sur demande de l’autorité administrative",
+    "Déplacement pour chercher les enfants à l’école et à l’occasion de leurs activités périscolaires",
+    "Déplacements pour effectuer des achats de fournitures nécessaires à l'activité professionnelle, ou pour des livraisons à domicile",
+    "Déplacements liés à un déménagement résultant d'un changement de domicile et déplacements indispensables à l'acquisition ou à la location d’une résidence principale, insusceptibles d'être différés",
+    "Déplacements pour se rendre dans un service public pour un acte ou une démarche qui ne peuvent être réalisés à distance",
+    "Déplacements à destination ou en provenance d'un lieu de culte",
+    "Participation à des rassemblements, réunions ou activités sur la voie publique ou dans un lieu ouvert au public qui ne sont pas interdits en application de l'article 3"
   ];
 
-  let motifs = ["travail", "achats", "sante", "famille", "handicap", "sport_animaux", "convocation", "missions", "enfants"];
-
-  drawText("x", crossCoords[raison - 1][0], crossCoords[raison - 1][1], 15);
+  let text = reasons[raison - 1];
+  let words = text.split(' ');
+  let y = 400;
+  while (words.length > 0) {
+    let portion = '';
+    while (portion.length < 70) {
+      portion += words.splice(0, 1) + ' ';
+    }
+    // let portion = text.slice(0, 100);
+    // text = text.slice(100);
+    drawText(portion, 55, y, 14);
+    y -= 20;
+  }
+  // drawText(reasons[raison - 1], 50, 300);
 
   const url = await QRCode.toString(
     `
